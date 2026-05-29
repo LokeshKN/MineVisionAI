@@ -7,9 +7,9 @@ const SECTIONS = [
     title: 'User Profile',
     desc: 'Name, email, role, and password',
     fields: [
-      { label: 'Full Name', value: 'Rajiv Kumar' },
+      { label: 'Full Name', value: 'Lokesh K N' },
       { label: 'Email', value: 'admin@minevisionai.in' },
-      { label: 'Role', value: 'Survey Engineer (Admin)' },
+      { label: 'Role', value: 'Developer (Admin)' },
       { label: 'Organisation', value: 'MineVisionAI Demo Client' },
     ]
   },
