@@ -4,7 +4,7 @@ import { useAuth } from '../AuthContext'
 import api from '../api/client'
 
 export default function Register() {
-  const [form, setForm] = useState({ name:'', email:'', password:'' })
+  const [form,    setForm]    = useState({ name:'', email:'', password:'' })
   const [loading, setLoading] = useState(false)
   const [error,   setError]   = useState('')
   const { login } = useAuth()
@@ -20,7 +20,11 @@ export default function Register() {
       await login(form.email, form.password)
       navigate('/')
     } catch (err) {
-      setError(err.response?.data?.detail || 'Registration failed.')
+      if (!err.response) {
+        setError('Cannot reach server. Wait ~30 s for Render to wake up, then try again.')
+      } else {
+        setError(err.response?.data?.detail || 'Registration failed.')
+      }
     } finally { setLoading(false) }
   }
 
@@ -41,14 +45,18 @@ export default function Register() {
 
       <form onSubmit={handleSubmit} style={{
         background:'var(--card)', border:'1px solid var(--border2)',
-        borderRadius:16, padding:'44px 40px', width:400, position:'relative', zIndex:1
+        borderRadius:16, padding:'44px 40px', width:420,
+        position:'relative', zIndex:1
       }}>
         <div style={{display:'flex', alignItems:'center', gap:10, marginBottom:36}}>
-          <div style={{width:40, height:40, background:'var(--accent)', borderRadius:9,
+          <div style={{
+            width:40, height:40, background:'var(--accent)', borderRadius:9,
             display:'flex', alignItems:'center', justifyContent:'center',
-            fontWeight:900, fontSize:16, color:'#000'}}>MV</div>
+            fontWeight:900, fontSize:16, color:'#000'
+          }}>MV</div>
           <div style={{fontSize:20, fontWeight:800}}>
-            Mine<span style={{color:'var(--accent)'}}>Vision</span>AI</div>
+            Mine<span style={{color:'var(--accent)'}}>Vision</span>AI
+          </div>
         </div>
 
         <h2 style={{fontSize:24, fontWeight:700, marginBottom:6}}>Create account</h2>
@@ -57,24 +65,28 @@ export default function Register() {
         </p>
 
         {error && (
-          <div style={{background:'rgba(239,68,68,.1)', border:'1px solid rgba(239,68,68,.3)',
-            borderRadius:8, padding:'10px 14px', marginBottom:16, fontSize:13, color:'var(--red)'}}>
-            {error}
-          </div>
+          <div style={{
+            background:'rgba(239,68,68,.1)', border:'1px solid rgba(239,68,68,.3)',
+            borderRadius:8, padding:'10px 14px', marginBottom:16,
+            fontSize:13, color:'var(--red)', lineHeight:1.5
+          }}>{error}</div>
         )}
 
         {[
-          ['Full Name',    'name',     form.name,     'text'],
-          ['Email',        'email',    form.email,    'email'],
-          ['Password',     'password', form.password, 'password'],
+          ['Full Name', 'name',     form.name,     'text'],
+          ['Email',     'email',    form.email,    'email'],
+          ['Password',  'password', form.password, 'password'],
         ].map(([lbl, key, val, type]) => (
           <div key={key} style={{marginBottom:18}}>
             <label style={{display:'block', fontSize:11, color:'var(--muted2)',
               textTransform:'uppercase', letterSpacing:'0.6px', marginBottom:7}}>{lbl}</label>
-            <input type={type} value={val} onChange={set(key)} required
+            <input
+              type={type} value={val}
+              onChange={set(key)} required
               style={inp}
-              onFocus={e=>e.target.style.borderColor='var(--accent)'}
-              onBlur={e=>e.target.style.borderColor='var(--border)'} />
+              onFocus={e => e.target.style.borderColor='var(--accent)'}
+              onBlur={e  => e.target.style.borderColor='var(--border)'}
+            />
           </div>
         ))}
 
